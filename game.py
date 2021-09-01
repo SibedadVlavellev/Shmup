@@ -1,35 +1,22 @@
 import random
+from collections import namedtuple
 
 import pygame
 
-from game_classes import Player
+import config
+import classes
 
 
 def main():
-    # Constants
-    FPS = 60
-    RESOLUTION = {
-        'width': 1600,
-        'height': 900
-    }
-    COLORS = {
-        'black': (0, 0, 0),
-        'white': (255, 255, 255),
-        'red': (255, 0, 0),
-        'green': (0, 255, 0),
-        'blue': (0, 0, 255),
-        'grey': (128, 128, 128),
-        'yellow': (255, 255, 0),
-    }
-    
-    # Basic settings
     pygame.init()
-    screen = pygame.display.set_mode((RESOLUTION['width'], 
-                                      RESOLUTION['height']))
-    pygame.display.set_caption('Shmup!')
+    screen = pygame.display.set_mode((config.SCREEN_WIDTH, 
+                                      config.SCREEN_HEIGHT))
+    pygame.display.set_caption(config.TITLE)
     clock = pygame.time.Clock()
 
     # Creation of sprites
+    player = classes.Player()
+    all_sprites = pygame.sprite.Group(player)
 
     # Game loop
     is_active = True
@@ -40,13 +27,15 @@ def main():
                 is_active = False
 
         # Game values calculation
+        all_sprites.update()
 
         # Drawing results
-        screen.fill(COLORS['grey'])
+        screen.fill(config.COLORS['grey'])
+        all_sprites.draw(screen)
         pygame.display.flip()
 
         # Setting FPS
-        clock.tick(FPS)
+        clock.tick(config.FPS)
 
     pygame.quit()
 
