@@ -5,6 +5,7 @@ import pygame
 
 import config
 import classes
+import sprites
 
 
 def main():
@@ -13,10 +14,6 @@ def main():
                                       config.SCREEN_HEIGHT))
     pygame.display.set_caption(config.TITLE)
     clock = pygame.time.Clock()
-
-    # Creation of sprites
-    player = classes.Player()
-    all_sprites = pygame.sprite.Group(player)
 
     # Game loop
     is_active = True
@@ -27,11 +24,16 @@ def main():
                 is_active = False
 
         # Game values calculation
-        all_sprites.update()
+        sprites.sprites.update()
+        hits = pygame.sprite.spritecollide(sprites.player, 
+                                           sprites.mobs, 
+                                           dokill=False)
+        if hits:
+            is_active = False
 
         # Drawing results
         screen.fill(config.COLORS['grey'])
-        all_sprites.draw(screen)
+        sprites.sprites.draw(screen)
         pygame.display.flip()
 
         # Setting FPS

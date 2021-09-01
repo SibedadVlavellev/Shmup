@@ -1,3 +1,5 @@
+import random
+
 import pygame
 
 import config
@@ -41,6 +43,9 @@ class Player(pygame.sprite.Sprite):
             self.rect.right = config.SCREEN_WIDTH
         elif self.rect.left < 0:
             self.rect.left = 0
+
+    def shoot(self):
+        Bullet(self.rect.centerx, self.rect.bottom)
        
     def update(self):
         self.__set_position()
@@ -48,16 +53,63 @@ class Player(pygame.sprite.Sprite):
 
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
-        pass
+       super().__init__() 
+       self.__set_image()
+       self.__set_rect()
+       self.__set_speed()
 
     def __set_image(self):
-        pass
+        width, height = 50, 50
+        self.image = pygame.surface.Surface((width, height))
+        self.image.fill(config.COLORS['red'])
 
     def __set_rect(self):
-        pass
+        self.rect = self.image.get_rect()
+        self.__set_position()
 
     def __set_position(self):
-        pass
+        x_min, x_max = 0, config.SCREEN_WIDTH - self.rect.width
+        y_offset_min, y_offset_max = -80, -30
+        self.rect.x = random.randint(x_min, x_max)
+        self.rect.bottom = random.randint(y_offset_min, y_offset_max)
+
+    def __set_speed(self):
+        speed_y_min, speed_y_max = 3, 8
+        self.speed_y = random.randint(speed_y_min, speed_y_max)
+        speed_x_min, speed_x_max = -3, 3
+        self.speed_x = random.randint(speed_x_min, speed_x_max)
 
     def update(self):
-        pass
+       self.rect.y += self.speed_y 
+       self.rect.x += self.speed_x
+
+       if (self.rect.top > config.SCREEN_HEIGHT
+               or self.rect.right < 0
+               or self.rect.left > config.SCREEN_WIDTH):
+           self.__set_position()
+           self.__set_speed()
+
+
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, center_x, bottom):
+        super().__init__()
+        self.__set_image()
+        self.__set_rect(center_x, bottom)
+        self.speed_y = 15
+
+    def __set_image(self):
+        width, height = 4, 16
+        self.image = pygame.surface.Surface((width, height))
+        self.image.fill(config.COLORS['yellow'])
+
+    def __set_rect(self, center_x, bottom):
+        offset_y = 5
+        self.rect = self.image.get_rect()
+        self.rect.centerx = center_x
+        self.rect.bottom = bottom - offset_y
+
+    def update(self):
+        self.rect.y -= self.speed_y
+
+        if self.rect.bottom < 0:
+            self.kill()
