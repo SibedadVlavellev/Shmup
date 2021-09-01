@@ -14,9 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.speed_x = 20
 
     def __set_image(self):
-        width, height = 70, 50
-        self.image = pygame.surface.Surface((width, height))
-        self.image.fill(config.COLORS['lincoln_green'])
+        self.image = config.IMAGES['player_ship']
 
     def __set_rect(self):
         offset_y = 10
@@ -62,9 +60,7 @@ class Mob(pygame.sprite.Sprite):
        self.__set_speed()
 
     def __set_image(self):
-        width, height = 50, 50
-        self.image = pygame.surface.Surface((width, height))
-        self.image.fill(config.COLORS['red'])
+        self.image = config.IMAGES['meteor']
 
     def __set_rect(self):
         self.rect = self.image.get_rect()
@@ -101,9 +97,7 @@ class Bullet(pygame.sprite.Sprite):
         self.speed_y = 15
 
     def __set_image(self):
-        width, height = 8, 16
-        self.image = pygame.surface.Surface((width, height))
-        self.image.fill(config.COLORS['yellow'])
+        self.image = config.IMAGES['laser']
 
     def __set_rect(self, center_x, bottom):
         self.rect = self.image.get_rect()
