@@ -3,6 +3,7 @@ import random
 import pygame
 
 import config
+import sprites
 
 
 class Player(pygame.sprite.Sprite):
@@ -45,7 +46,9 @@ class Player(pygame.sprite.Sprite):
             self.rect.left = 0
 
     def shoot(self):
-        Bullet(self.rect.centerx, self.rect.bottom)
+        bullet = Bullet(self.rect.centerx, self.rect.top)
+        sprites.sprites.add(bullet)
+        sprites.bullets.add(bullet)
        
     def update(self):
         self.__set_position()
@@ -98,15 +101,14 @@ class Bullet(pygame.sprite.Sprite):
         self.speed_y = 15
 
     def __set_image(self):
-        width, height = 4, 16
+        width, height = 8, 16
         self.image = pygame.surface.Surface((width, height))
         self.image.fill(config.COLORS['yellow'])
 
     def __set_rect(self, center_x, bottom):
-        offset_y = 5
         self.rect = self.image.get_rect()
         self.rect.centerx = center_x
-        self.rect.bottom = bottom - offset_y
+        self.rect.bottom = bottom 
 
     def update(self):
         self.rect.y -= self.speed_y
